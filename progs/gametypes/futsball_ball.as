@@ -202,12 +202,18 @@ class Ball
 		Trace tr;
 		for ( float theta = 0; theta <= pi; theta += step )
 		{
+			float sinTheta = sin(theta);
+			float cosTheta = cos(theta);
+
 			for ( float phi = -pi; phi < pi; phi += step )
 			{
+				float sinPhi = sin(phi);
+				float cosPhi = cos(phi);
+
 				offset = Vec3(
-					sin(theta) * cos(phi),
-					sin(theta) * sin(phi),
-					cos(theta)
+					sinTheta * cosPhi,
+					sinTheta * sinPhi,
+					cosTheta
 				);
 				offset.normalize();
 
@@ -225,7 +231,8 @@ class Ball
 		{
 			planeNormal.normalize();
 
-			vel += planeNormal * (1.0+fb_bounce.value)* ( abs(vel*planeNormal) );
+			float velDotPlane = abs(vel * planeNormal);
+			vel += planeNormal * (1.0+fb_bounce.value)* velDotPlane;
 			vel *= fb_friction.value;
 			if ( abs(vel.z) < fb_stop.value && planeNormal.z > 0.9 )
 			{
@@ -234,7 +241,7 @@ class Ball
 				@this.groundEntity = @G_GetEntity(entNum);
 			}
 
-			if ( abs(vel*planeNormal)  > 2.0 )
+			if ( velDotPlane > 2.0 )
 				G_PositionedSound( origin, CHAN_ITEM, G_SoundIndex("sounds/futsball/ball_bounce_" + int( brandom( 0, 12 ) ) ), 5.0/vel.length() );
 		}
 
