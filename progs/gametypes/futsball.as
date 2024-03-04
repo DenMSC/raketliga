@@ -72,7 +72,7 @@ void GT_SpawnGametype()
 /// MODULE SCRIPT CALLS
 ///*****************************************************************
 
-bool GT_Command( Client @client, const String &cmdString, const String &argsString, int argc )
+bool GT_Command( Client @client, const String &in cmdString, const String &in argsString, int argc )
 {
     if ( cmdString == "cvarinfo" )
     {
@@ -156,8 +156,8 @@ String @GT_ScoreboardMessage( uint maxlen )
 
             int playerID = ( ent.isGhosting() && ( match.getState() == MATCH_STATE_PLAYTIME ) ) ? -( ent.playerNum + 1 ) : ent.playerNum;
 
-            // "Name Score Ping C R"
-            entry = "&p " + playerID + " " + ent.client.clanName + " "
+            // "AVATAR Name Score Ping C R"
+            entry = "&p " + playerID + " " + playerID + " " + ent.client.clanName + " "
                     + goals[ent.playerNum] + " " + owngoals[ent.playerNum] + " "
                     + ent.client.ping + " " + ( ent.client.isReady() ? "1" : "0" ) + " ";
 
@@ -171,7 +171,7 @@ String @GT_ScoreboardMessage( uint maxlen )
 
 // Some game actions get reported to the script as score events.
 // Warning: client can be null
-void GT_ScoreEvent( Client @client, const String &score_event, const String &args )
+void GT_ScoreEvent( Client @client, const String &in score_event, const String &in args )
 {
     if ( score_event == "dmg" )
     {
@@ -444,8 +444,8 @@ void GT_InitGametype()
         gametype.setTeamSpawnsystem( team, SPAWNSYSTEM_INSTANT, 0, 0, false );
 
     // define the scoreboard layout
-    G_ConfigString( CS_SCB_PLAYERTAB_LAYOUT, "%n 112 %s 52 %i 52 %i 60 %l 48 %r l1" );
-    G_ConfigString( CS_SCB_PLAYERTAB_TITLES, "Name Clan Goals OwnGoals Ping R" );
+    G_ConfigString( CS_SCB_PLAYERTAB_LAYOUT, "%a l1 %n 112 %s 52 %i 52 %i 60 %l 48 %r l1" );
+    G_ConfigString( CS_SCB_PLAYERTAB_TITLES, "AVATAR Name Clan Goals OwnGoals Ping R" );
 
     int bla = G_SoundIndex("sounds/futsball/ball_close_0.ogg", true);
     int bli = G_SoundIndex( "sounds/futsball/announcer_siren_0", true );
